@@ -1,4 +1,4 @@
-defmodule Volapi.Message.Login do
+defmodule Imagapi.Message.Login do
   defstruct [
     logged_in: false,
     nick: "",

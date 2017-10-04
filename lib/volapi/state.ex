@@ -1,4 +1,4 @@
-defmodule Volapi.State do
+defmodule Imagapi.State do
   defstruct [
     user_count: 0,
     client_ack: 0,

@@ -1,8 +1,8 @@
-defmodule Volapi.Mixfile do
+defmodule Imagapi.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :volapi,
+    [app: :imagapi,
      version: "1.1.3",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
@@ -10,9 +10,9 @@ defmodule Volapi.Mixfile do
      deps: deps(),
 
      # docs
-     name: "Volapi",
-     source_url: "https://github.com/dongmaster/volapi",
-     homepage_url: "https://github.com/dongmaster/volapi",
+     name: "iMAGApi",
+     source_url: "https://github.com/dongmaster/imagapi",
+     homepage_url: "https://github.com/dongmaster/imagapi",
      docs: [main: "Volapi", # The main page in the docs
             #logo: "path/to/logo.png",
             extras: ["README.md"]]
@@ -24,7 +24,7 @@ defmodule Volapi.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     [applications: [:logger, :crypto, :ssl],
-     mod: {Volapi, []}]
+     mod: {Imagapi, []}]
   end
 
   # Dependencies can be Hex packages:

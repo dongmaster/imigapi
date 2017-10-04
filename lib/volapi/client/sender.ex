@@ -1,15 +1,16 @@
-defmodule Volapi.Client.Sender do
+defmodule Imagapi.Client.Sender do
   @short 1800
   @medium 7200
   @long 86400
 
   @doc """
-  Generic function for sending frames using the Volapi.WebSocket.Server
+  Generic function for sending frames using the Imagapi.WebSocket.Server
   """
   def gen_send(frame, room) do
-    {:ok, data} = gen_build(frame, room) |> Poison.encode
+    # {:ok, data} = gen_build(frame, room) |> Poison.encode
+    {:ok, data} = Poison.encode(frame)
 
-    Volapi.WebSocket.Server.reply(data, room)
+    Imagapi.WebSocket.Server.reply(data, room)
   end
 
   @doc """
@@ -27,8 +28,8 @@ defmodule Volapi.Client.Sender do
   Be wary when using this so you don't set a wrong client_ack.
   """
   def gen_build(frame, client_ack_offset, room) do
-    server_ack = Volapi.Server.Client.get_ack(:server, room)
-    client_ack = Volapi.Server.Client.get_ack(:client, room) + client_ack_offset
+    server_ack = Imagapi.Server.Client.get_ack(:server, room)
+    client_ack = Imagapi.Server.Client.get_ack(:client, room) + client_ack_offset
     [server_ack, [[0, frame], client_ack]]
   end
 
@@ -36,13 +37,13 @@ defmodule Volapi.Client.Sender do
   Special internal function that should hopefully keep the connection alive.
   """
   def keep_alive(room) do
-    {:ok, data} = [Volapi.Server.Client.get_ack(:server, room)] |> Poison.encode
+    # {:ok, data} = [Imagapi.Server.Client.get_ack(:server, room)] |> Poison.encode
 
-    Volapi.WebSocket.Server.reply(data, room)
+    # Imagapi.WebSocket.Server.reply(data, room)
   end
 
   def subscribe(nick, room) do
-    checksum = Volapi.Util.get_checksum()
+    checksum = Imagapi.Util.get_checksum()
 
     frame = ["subscribe", %{"nick" => nick, "room" => room, "checksum" => checksum, "checksum2" => checksum}]
 
@@ -50,29 +51,30 @@ defmodule Volapi.Client.Sender do
   end
 
   def send_message(message, room) do
-    nick = Application.get_env(:volapi, :nick)
+    nick = Application.get_env(:imagapi, :nick)
     send_message(message, nick, room)
   end
 
   def send_message(message, :me, room) do
-    nick = Application.get_env(:volapi, :nick)
+    nick = Application.get_env(:imagapi, :nick)
 
     frame = ["call", %{"fn" => "command", "args" => [nick, "me", message]}]
 
-    gen_send(frame, room)
+    # gen_send(frame, room)
   end
 
   def send_message(message, :admin, room) do
-    nick = Application.get_env(:volapi, :nick)
+    nick = Application.get_env(:imagapi, :nick)
 
     frame = ["call", %{"fn" => "command", "args" => [nick, "a", message]}]
 
-    gen_send(frame, room)
+    # gen_send(frame, room)
   end
 
   def send_message(message, nick, room) do
-    frame = ["call", %{"args" => [nick, message], "fn" => "chat"}]
-
+    #frame = ["call", %{"args" => [nick, message], "fn" => "chat"}]
+    frame = %{"type" => "CHAT_MESSAGE", "data" => %{"message" => message, "timestamp" => "2017-10-04T00:00:00.000Z", "sender" => nick}}
+    # {"type":"CHAT_MESSAGE","data":{"message":"incognito still uses cookies","timestamp":"2017-10-04T15:17:51.138Z","sender":"Soniwoh"}}
     gen_send(frame, room)
   end
 
@@ -99,7 +101,7 @@ defmodule Volapi.Client.Sender do
   end
 
   @doc """
-  `id` refers to the id key in the %Volapi.Chat{} struct.
+  `id` refers to the id key in the %Imagapi.Chat{} struct.
   It is only available to room owners.
 
   The seconds argument can also be :short, :medium and :long.
@@ -128,7 +130,7 @@ defmodule Volapi.Client.Sender do
   end
 
   @doc """
-  `id` refers to the file_id key in any of the %Volapi.File.*{} structs.
+  `id` refers to the file_id key in any of the %Imagapi.File.*{} structs.
   It is only available to room owners.
   """
   def timeout_file(id, nick, seconds, room) do

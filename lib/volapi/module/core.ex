@@ -1,5 +1,5 @@
-defmodule Volapi.Module.Core do
-  #use Volapi.Module, "core"
+defmodule Imagapi.Module.Core do
+  #use Imagapi.Module, "core"
 
   def handle_cast({:check_callbacks, message}, callbacks) do
     f = fn {from, matcher} ->

@@ -1,4 +1,4 @@
-defmodule Volapi.Server.Util do
+defmodule Imagapi.Server.Util do
   def cast(type, data) do
     spawn(fn ->
       try do

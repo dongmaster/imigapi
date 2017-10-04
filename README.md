@@ -1,11 +1,11 @@
-# Volapi
+# Imagapi
 
-This is a simple and reliable API client for [Volafile.org](https://volafile.org).
+This API client is as feature complete as Imig.es :^).
 
-Volapi.ex is reasonably stable and should work for most purposes.
-Some features have yet to been implemented though, because I'm lazy.
+This is a simple API client for [Imig.es](https://Imig.es).
 
-If you want to use this, you should know that breaking changes will be introduced possibly frequently.
+Imagapi.ex is reasonably stable and should work for most purposes.
+Some features have yet been implemented, because I'm lazy.
 
 ## Examples
 ### Setup
@@ -16,16 +16,16 @@ Create a new mix project and add this to your deps:
 ```elixir
 defp deps do
   [
-    {:volapi, git: "https://github.com/dongmaster/volapi", tag: "v2.1.15"},
+    {:imagapi, git: "https://github.com/dongmaster/volapi", tag: "v2.1.15"},
   ]
 end
 ```
 
-You also need to add `:volapi` to the applications list in the mix.exs file.
+You also need to add `:imagapi` to the applications list in the mix.exs file.
 ```elixir
 def application do
-  [applications: [:logger, :volapi],
-   mod: {Volapi, []}]
+  [applications: [:logger, :imagapi],
+   mod: {Imagapi, []}]
 end
 ```
 
@@ -37,21 +37,21 @@ config.exs:
 ```elixir
 use Mix.Config
 
-config :volapi,
+config :imagapi,
   nick: "ElixirBot",
   password: "CoolBot!",
   auto_login: false # Logs in automatically after connecting to Volafile. Can be a bit spotty so don't rely on this too much. You can just omit this from your config.exs if you don't intend on using it.
   rooms: ["room1"]
 ```
 
-Now you're ready to use Volapi.ex.
+Now you're ready to use Imagapi.ex.
 
 The following examples are clones of the examples in [RealDolos's Volapi](https://github.com/realdolos/volapi) README.
 ### Basic
 This is a very simple example.
 ```elixir
-defmodule Volapi.Bot.Basic do
-  use Volapi.Module, "basic"
+defmodule Imagapi.Bot.Basic do
+  use Imagapi.Module, "basic"
 
   ## Handlers
   
@@ -77,8 +77,8 @@ HvoXw has the response "Don't you mean GNU/Hollywood?"
 
 This is easily solvable though :^)
 ```elixir
-defmodule Volapi.Bot.Basic2 do
-  use Volapi.Module, "basic2"
+defmodule Imagapi.Bot.Basic2 do
+  use Imagapi.Module, "basic2"
 
   ## Handlers
 
@@ -112,7 +112,7 @@ defmodule Volapi.Bot.Basic2 do
 end
 ```
 
-It is best practice to follow the HER (Handlers, Enforcers, Responders) format as seen above, when writing Volapi.ex modules.
+It is best practice to follow the HER (Handlers, Enforcers, Responders) format as seen above, when writing Imagapi.ex modules.
 
 ## Features not implemented (because of laziness and lack of need of these features)
 - Session resuming (When your connection to Volafile dies, you can resume your session by providing the previously used ids)

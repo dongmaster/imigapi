@@ -1,4 +1,4 @@
-defmodule Volapi.Server do
+defmodule Imagapi.Server do
   use GenServer
   defstruct [
     user_count: 0,
@@ -20,7 +20,7 @@ defmodule Volapi.Server do
   ]
 
   ## Client API
-  # The actual Client API is in Volapi.Server.Client
+  # The actual Client API is in Imagapi.Server.Client
 
   def start_link(room) do
     GenServer.start_link(__MODULE__, room, name: {:global, "volapi_server_" <> room})
@@ -31,9 +31,9 @@ defmodule Volapi.Server do
   def init(room) do
     state = %__MODULE__{}
 
-    spawn(fn ->
-      Volapi.Room.populate_config(room)
-    end)
+    # spawn(fn ->
+    #   Imagapi.Room.populate_config(room)
+    # end)
 
     {:ok, state}
   end
@@ -132,7 +132,7 @@ defmodule Volapi.Server do
 
   def handle_info({:del_file, file}, state) do
     spawn(fn ->
-      GenServer.cast(Volapi.Server.Client.this(state.room_id), {:del_file, file})
+      GenServer.cast(Imagapi.Server.Client.this(state.room_id), {:del_file, file})
     end)
   end
 

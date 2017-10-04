@@ -1,4 +1,4 @@
-defmodule Volapi.Message.Connected do
+defmodule Imagapi.Message.Connected do
   defstruct [
     connected: false,
     room: "",

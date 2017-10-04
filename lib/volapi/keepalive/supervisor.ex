@@ -1,4 +1,4 @@
-defmodule Volapi.KeepAlive.Supervisor do
+defmodule Imagapi.KeepAlive.Supervisor do
   use Supervisor
 
   def start_link(opts \\ []) do
@@ -7,8 +7,8 @@ defmodule Volapi.KeepAlive.Supervisor do
 
   def init(:ok) do
     #Logger.log :debug, "Starting modules!"
-    rooms = Application.get_env(:volapi, :rooms, [])
-    |> Enum.map(fn(room) -> worker(Volapi.KeepAlive, [room], id: "volapi_keepalive_supervisor_" <> room) end)
+    rooms = Application.get_env(:imagapi, :rooms, [])
+    |> Enum.map(fn(room) -> worker(Imagapi.KeepAlive, [room], id: "volapi_keepalive_supervisor_" <> room) end)
     |> supervise(strategy: :one_for_one)
 
 

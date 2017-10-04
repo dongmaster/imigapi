@@ -1,10 +1,10 @@
-defmodule Volapi.Module.Supervisor do
+defmodule Imagapi.Module.Supervisor do
   use Supervisor
   require Logger
 
   @moduledoc """
   Module supervisor. It runs all modules specified in the :modules
-  configuration option for :volapi.
+  configuration option for :imagapi.
   """
 
   def start_link(opts \\ []) do
@@ -28,7 +28,7 @@ defmodule Volapi.Module.Supervisor do
     |> List.flatten
   end
 
-  @module_re ~r/(?<module>.*).Volapi_Module.beam$/
+  @module_re ~r/(?<module>.*).Imagapi_Module.beam$/
 
   defp match_module(file, modules) do
     captures = Regex.named_captures(@module_re,  List.to_string(file))

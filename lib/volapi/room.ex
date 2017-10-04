@@ -1,4 +1,4 @@
-defmodule Volapi.Room do
+defmodule Imagapi.Room do
   @room_config_keys [
     "disabled", "file_max_size", "file_time_to_life",
     "max_room_name_length", "motd", "name",
@@ -6,7 +6,7 @@ defmodule Volapi.Room do
   ]
 
   def populate_config(room) do
-    config = Volapi.Util.get_room_config(room)
+    config = Imagapi.Util.get_room_config(room)
 
     Enum.each(config, fn({key, value}) ->
       if key in @room_config_keys do
@@ -20,7 +20,7 @@ defmodule Volapi.Room do
               value
           end
 
-        Volapi.Server.Client.set_config(String.to_atom(key), value, room)
+        Imagapi.Server.Client.set_config(String.to_atom(key), value, room)
       end
     end)
   end

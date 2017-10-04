@@ -1,4 +1,4 @@
-defmodule Volapi.KeepAlive do
+defmodule Imagapi.KeepAlive do
   use GenServer
 
   ## Client API
@@ -38,7 +38,7 @@ defmodule Volapi.KeepAlive do
   end
 
   def handle_info(:keep_alive_, state) do
-    Volapi.Client.Sender.keep_alive(state.room)
+    Imagapi.Client.Sender.keep_alive(state.room)
     {:noreply, state}
   end
 end

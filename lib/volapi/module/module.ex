@@ -1,6 +1,6 @@
-defmodule Volapi.Module do
+defmodule Imagapi.Module do
   @moduledoc """
-  Module which provides functionality used for creating Volapi modules.
+  Module which provides functionality used for creating Imagapi modules.
 
 
   When this module is used, it will create wrapper functions which allow it to be automatically registered as a module and include all macros. It can be included with:
@@ -10,8 +10,8 @@ defmodule Volapi.Module do
   Once this is done, the module will start automatically and you will be able to use `handle`, `defh`, and other macros.
 
 
-  Modules can be loaded and unloaded using `Volapi.Util.loadModule`, `Volapi.Util.unloadModule`,
-  and `Volapi.Util.reloadModule` (This has not actually been implemented yet. Placeholder documentaion).
+  Modules can be loaded and unloaded using `Imagapi.Util.loadModule`, `Imagapi.Util.unloadModule`,
+  and `Imagapi.Util.reloadModule` (This has not actually been implemented yet. Placeholder documentaion).
 
 
   Modules also provide three hooks for certain events that you may want to react to.
@@ -22,11 +22,11 @@ defmodule Volapi.Module do
   defmacro __using__(module_name) do
     quote bind_quoted: [module_name: module_name] do
       use GenServer
-      import Volapi.Module
+      import Imagapi.Module
 
       @module_name module_name
       @task_table String.to_atom("#{@module_name}_tasks")
-      @before_compile Volapi.Module
+      @before_compile Imagapi.Module
 
       init_attrs()
 
@@ -86,7 +86,7 @@ defmodule Volapi.Module do
       defoverridable on_message: 1
 
       # Used to scan for valid modules on start
-      defmodule Volapi_Module do
+      defmodule Imagapi_Module do
       end
     end
   end
@@ -134,7 +134,7 @@ defmodule Volapi.Module do
   """
   defmacro handle("chat", do: body) do
     quote do
-      def handle_cast({:msg, %Volapi.Message.Chat{} = var!(message)}, state) do
+      def handle_cast({:msg, %Imagapi.Message.Chat{} = var!(message)}, state) do
         on_message(var!(message))
         unquote(body)
         {:noreply, state}
@@ -144,7 +144,7 @@ defmodule Volapi.Module do
 
   defmacro handle("file", do: body) do
     quote do
-      def handle_cast({:file, %Volapi.Message.File{} = var!(message)}, state) do
+      def handle_cast({:file, %Imagapi.Message.File{} = var!(message)}, state) do
         on_message(var!(message))
         unquote(body)
         {:noreply, state}
@@ -164,7 +164,7 @@ defmodule Volapi.Module do
 
   defmacro handle("timeout", do: body) do
     quote do
-      def handle_cast({:timeout, %Volapi.Message.Timeout{} = var!(message)}, state) do
+      def handle_cast({:timeout, %Imagapi.Message.Timeout{} = var!(message)}, state) do
         on_message(var!(message))
         unquote(body)
         {:noreply, state}
@@ -256,7 +256,7 @@ defmodule Volapi.Module do
 
   defp add_re_matcher(body, re) do
     quote do
-      m = Volapi.Util.get_text_from_message(var!(message))
+      m = Imagapi.Util.get_text_from_message(var!(message))
       case Regex.named_captures(unquote(re), m) do
         nil -> :ok
         res -> unquote(body)
@@ -422,7 +422,7 @@ defmodule Volapi.Module do
   defp add_captures(body, match_str, match_group) do
     re = match_str |> extract_vars(match_group) |> Macro.escape
     quote do
-      m = Volapi.Util.get_text_from_message(var!(message))
+      m = Imagapi.Util.get_text_from_message(var!(message))
       case Regex.named_captures(unquote(re), m) do
         nil ->
           :ok
@@ -597,7 +597,7 @@ defmodule Volapi.Module do
   defmacro reply(response) do
     quote do
       room = var!(message).room
-      Volapi.Client.Sender.send_message(unquote(response), room)
+      Imagapi.Client.Sender.send_message(unquote(response), room)
     end
   end
 
@@ -608,7 +608,7 @@ defmodule Volapi.Module do
   defmacro reply_me(response) do
     quote do
       room = var!(message).room
-      Volapi.Client.Sender.send_message(unquote(response), :me, room)
+      Imagapi.Client.Sender.send_message(unquote(response), :me, room)
     end
   end
 
@@ -619,7 +619,7 @@ defmodule Volapi.Module do
   defmacro reply_admin(response) do
     quote do
       room = var!(message).room
-      Volapi.Client.Sender.send_message(unquote(response), :admin, room)
+      Imagapi.Client.Sender.send_message(unquote(response), :admin, room)
     end
   end
 

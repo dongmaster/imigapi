@@ -1,4 +1,4 @@
-defmodule Volapi.Message.File do
+defmodule Imagapi.Message.File do
   defstruct [
     file_id: "",
     file_name: "",

@@ -1,8 +1,10 @@
-defmodule Volapi.Util do
+defmodule Imagapi.Util do
   require Logger
-  @server Application.get_env(:volapi, :server, "volafile.org")
+  @server Application.get_env(:imagapi, :server, "volafile.org")
   @volafile_room_url "https://#{@server}/r/<%= room %>"
   @volafile_login_url "https://#{@server}/rest/login?name=<%= name %>&password=<%= password %>"
+  @imig_room_api "https://api.imig.es/api/room/<%= room %>"
+
   @moduledoc """
   This module is used for utility functions.
   """
@@ -13,6 +15,20 @@ defmodule Volapi.Util do
   """
   def random_id(length) do
     :crypto.strong_rand_bytes(length + 5) |> Base.url_encode64(padding: false) |> String.slice(0, length)
+  end
+
+  def get_cookie(room) do
+    HTTPoison.start
+    # https://api.imig.es/api/room/E8PbB0D
+
+    {:ok, %{headers: headers}} = HTTPoison.get(EEx.eval_string(@imig_room_api, [room: room]))
+
+    [{_, cookie}] = Enum.filter(headers, fn({key, value}) ->
+      key == "set-cookie"
+    end)
+
+    cookie = String.split(cookie, ";") |> hd 
+    cookie
   end
 
   def get_checksum() do
@@ -42,8 +58,8 @@ defmodule Volapi.Util do
   def get_login_key(room) do
     HTTPoison.start
 
-    nick = Application.get_env(:volapi, :nick)
-    password = Application.get_env(:volapi, :password, nil)
+    nick = Application.get_env(:imagapi, :nick)
+    password = Application.get_env(:imagapi, :password, nil)
 
     if password != nil do
       {:ok, %{body: body}} = HTTPoison.get(EEx.eval_string(@volafile_login_url, [name: nick, password: password]), [{"Accept", "application/json"}, {"Referer", "https://#{@server}"}])
@@ -72,19 +88,19 @@ defmodule Volapi.Util do
       {:error, message} ->
         Logger.error(message)
       {:success, key} ->
-        Volapi.Client.Sender.login(key, room)
+        Imagapi.Client.Sender.login(key, room)
     end
   end
 
   def get_text_from_message(message) do
     case message do
-      %Volapi.Message.Chat{} ->
+      %Imagapi.Message.Chat{} ->
         message.message
-      %Volapi.Message.File{} ->
+      %Imagapi.Message.File{} ->
         message.file_name
-      %Volapi.Message.Timeout{} ->
+      %Imagapi.Message.Timeout{} ->
         message.name
-      %Volapi.Message.UserCount{} ->
+      %Imagapi.Message.UserCount{} ->
         message.user_count
     end
   end
@@ -94,7 +110,7 @@ defmodule Volapi.Util do
   end
 
   def upload(file_path, filename, room) do
-    Volexupload.main(Application.get_env(:volapi, :nick), room, file_path, filename)
+    Volexupload.main(Application.get_env(:imagapi, :nick), room, file_path, filename)
   end
 
 
@@ -110,12 +126,12 @@ defmodule Volapi.Util do
       :loaded
     else
       Logger.debug("Creating new #{table} table.")
-      :ets.new(table, Application.get_env(:volapi, :ets_options, []) ++ options)
+      :ets.new(table, Application.get_env(:imagapi, :ets_options, []) ++ options)
       :created
     end
   end
 
   defp get_dir do
-    Application.get_env(:volapi, :ets_table_dir, "priv/tables")
+    Application.get_env(:imagapi, :ets_table_dir, "priv/tables")
   end
 end

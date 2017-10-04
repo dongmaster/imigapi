@@ -1,24 +1,11 @@
-defmodule Volapi.Message.Chat do
+defmodule Imagapi.Message.Chat do
   # There's a data key in message maps that contains data such as if a message is sent by you (self: true) or IP addresses
   defstruct [
-    raw_message: [],
     message: "", # Multi-part. Multiple parts can be witnessed when using newlines in a message and links.
-    message_alt: "",
     room: "",
     nick: "",
     nick_alt: "", # Convenience key. Useful for pattern matching. It's just the nick downcased.
-    id: "", # For room owners. Used for timeouts.
-    ip: "",
-    channel: "",
-    self: false,
-    admin: false,
-    donator: false,
-    staff: false,
-    profile: "",
-    user: false, # This is true if the user is logged in.
-    logged_in: false,
-    files: [],
-    rooms: [],
+    timestamp: "",
   ]
 
   def raw_to_string(raw_message) do

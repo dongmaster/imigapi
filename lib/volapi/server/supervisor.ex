@@ -1,4 +1,4 @@
-defmodule Volapi.Server.Supervisor do
+defmodule Imagapi.Server.Supervisor do
   use Supervisor
 
   def start_link(opts \\ []) do
@@ -7,8 +7,8 @@ defmodule Volapi.Server.Supervisor do
 
   def init(:ok) do
     #Logger.log :debug, "Starting modules!"
-    rooms = Application.get_env(:volapi, :rooms, [])
-    |> Enum.map(fn(room) -> worker(Volapi.Server, [room], id: "volapi_server_supervisor_" <> room) end)
+    rooms = Application.get_env(:imagapi, :rooms, [])
+    |> Enum.map(fn(room) -> worker(Imagapi.Server, [room], id: "volapi_server_supervisor_" <> room) end)
     |> supervise(strategy: :one_for_one)
 
 

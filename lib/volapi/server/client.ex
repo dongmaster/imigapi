@@ -1,9 +1,9 @@
-defmodule Volapi.Server.Client do
-  alias Volapi.Server.Util
+defmodule Imagapi.Server.Client do
+  alias Imagapi.Server.Util
   ## Client API
 
   #def start_link(room) do
-  #  GenServer.start_link(Volapi.Server, %{}, name: {:global, "volapi_server_" <> room})
+  #  GenServer.start_link(Imagapi.Server, %{}, name: {:global, "volapi_server_" <> room})
   #end
 
   def this(room) do
